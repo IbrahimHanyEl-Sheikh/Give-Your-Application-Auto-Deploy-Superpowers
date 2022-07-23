@@ -271,46 +271,47 @@ jobs:
 
       - destroy-environment:
           stackName: udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
-  # deploy-backend:
-  #   docker:
-  #     # Docker image here that supports Ansible
-  #     - image: python:3.7-alpine3.11
-  #   steps:
-  #     # Checkout code from git
-  #     - checkout
-  #     - add_ssh_keys:
-  #         # You can get this ID in the section where you registered the SSH Key
-  #         fingerprints: ["7a:08:f1:81:4f:2a:a9:ba:39:f8:36:87:0b:8a:1f:61"] 
-  #     - attach_workspace:
-  #         at: ~/
+  deploy-backend:
+    docker:
+      # Docker image here that supports Ansible
+      - image: python:3.7-alpine3.11
+    steps:
+      # Checkout code from git
+      - checkout
+      - add_ssh_keys:
+          # You can get this ID in the section where you registered the SSH Key
+          fingerprints: ["7a:08:f1:81:4f:2a:a9:ba:39:f8:36:87:0b:8a:1f:61"] 
+      - attach_workspace:
+          at: ~/
 
-  #     - run:
-  #         name: Install dependencies
-  #         command: |
-  #           apk add curl
-  #           apk add --upgrade bash
-  #           apk add --upgrade ansible
-  #           apk add --update nodejs npm
+      - run:
+          name: Install dependencies
+          command: |
+            apk add curl
+            apk add --upgrade bash
+            apk add --upgrade ansible
+            apk add --update nodejs npm
+            apk add --no-cache tar
+            apk add --no-cache gzip
+            pip3 install awscli
+      - run:
+          name: Deploy backend
+          command: |
+            cd backend
+            npm i
+            npm run build
+            cd ..
+            # Zip the directory
+            tar -C backend -czvf artifact.tar.gz .
+            cd .circleci/ansible
+            echo "Contents  of the inventory.txt file is -------"
+            cat inventory.txt
+            export ANSIBLE_HOST_KEY_CHECKING=False
+            ansible-playbook -i inventory.txt deploy-backend.yml
 
-  #           pip3 install awscli
-  #     - run:
-  #         name: Deploy backend
-  #         command: |
-  #           cd backend
-  #           npm i
-  #           npm run build
-  #           cd ..
-  #           # Zip the directory
-  #           tar -C backend -czvf artifact.tar.gz .
-  #           cd .circleci/ansible
-  #           echo "Contents  of the inventory.txt file is -------"
-  #           cat inventory.txt
-  #           export ANSIBLE_HOST_KEY_CHECKING=False
-  #           ansible-playbook -i inventory.txt deploy-backend.yml
-
-  #     - destroy-environment:
-  #         stackName: udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
-  #     # Here's where you will add some code to rollback on failure  
+      - destroy-environment:
+          stackName: udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
+      # Here's where you will add some code to rollback on failure  
 
 #   smoke-test:
 #     docker:
@@ -397,8 +398,8 @@ workflows:
           requires: [configure-infrastructure]
       - deploy-frontend:
           requires: [run-migrations]
-      # - deploy-backend:
-      #     requires: [run-migrations]
+      - deploy-backend:
+          requires: [run-migrations]
       # - smoke-test:
       #     requires: [deploy-backend, deploy-frontend]
       # - cloudfront-update:

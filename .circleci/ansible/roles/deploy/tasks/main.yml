@@ -1,0 +1,9 @@
+---
+- name: install dependencies
+  command: npm install
+
+- name: stop running pm2 services 
+  command: pm2 stop default
+
+- name: start the pm2 with our code
+  command: pm2 start npm -- start
