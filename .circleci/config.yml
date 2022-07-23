@@ -173,27 +173,39 @@ jobs:
       - destroy-environment:
           stackName: udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
       
-      # Here's where you will add some code to rollback on failure      
 
-#   configure-infrastructure:
-#     docker:
-#       # Docker image here that supports Ansible
-#       - image: python:3.7-alpine3.11
-#     steps:
-#       # Checkout code from git
-#       # Add ssh keys with fingerprint
-#       # attach workspace
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # Your code here
-#             exit 1
-#       - run:
-#           name: Configure server
-#           command: |
-#             # Your code here
-#             exit 1
-#       # Here's where you will add some code to rollback on failure      
+  # configure-infrastructure:
+  #   docker:
+  #     # Docker image here that supports Ansible
+  #     - image: python:3.7-alpine3.11
+  #   steps:
+  #     # Checkout code from git
+  #     - checkout
+  #     - add_ssh_keys:
+  #             # You can get this ID in the section where you registered the SSH Key
+  #             fingerprints: ["7a:08:f1:81:4f:2a:a9:ba:39:f8:36:87:0b:8a:1f:61"] 
+
+  #     - attach_workspace:
+  #         at: ~/
+  #     - run:
+  #         name: Install dependencies
+  #         command: |
+  #           # Your code here
+  #           yum -y install tar gzip
+  #           apk add --update ansible
+
+
+  #     - run:
+  #         name: Configure server
+  #         command: |
+  #           cd .circleci/ansible
+  #           ansible-playbook -i inventory.txt configure-server.yml
+
+  #     - destroy-environment:
+  #         stackName: udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
+
+  #     - destroy-environment:
+  #         stackName: udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
 
 #   run-migrations:
 #     docker:
@@ -329,9 +341,9 @@ workflows:
           requires: [build-frontend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-      #     filters:
-      #       branches:
-      #         only: [test-feature-branch]
+          filters:
+            branches:
+              only: [test-feature-branch]
       # - configure-infrastructure:
       #     requires: [deploy-infrastructure]
       # - run-migrations:
