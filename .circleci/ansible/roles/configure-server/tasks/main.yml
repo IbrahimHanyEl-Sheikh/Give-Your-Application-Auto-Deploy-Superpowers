@@ -21,4 +21,4 @@
     name: pm2
     state: latest
     global: yes
-    #production: yes
+    production: yes
