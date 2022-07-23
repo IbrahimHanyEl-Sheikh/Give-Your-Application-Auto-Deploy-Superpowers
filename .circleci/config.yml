@@ -252,7 +252,7 @@ jobs:
           command: |
             yum -y install tar gzip
             yum install -y python3
-            yum install -y nodejs
+            yum install -y nodejs npm --enablerepo=epel
             yum install -y ansible
             
       - run:
