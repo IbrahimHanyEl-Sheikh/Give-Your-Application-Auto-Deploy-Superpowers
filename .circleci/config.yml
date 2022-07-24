@@ -285,12 +285,14 @@ jobs:
             apk add --no-cache tar
             apk add --no-cache gzip
             pip3 install awscli
+      - restore_cache:  
+          keys: [backend-build]
       - run:
           name: Deploy backend
           command: |
             cd backend
             npm i
-            npm run build
+            # npm run build
             cd ..
             # Zip the directory
             tar -C backend -czvf artifact.tar.gz .
