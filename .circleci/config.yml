@@ -332,6 +332,7 @@ jobs:
               export BACKEND_IP=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text)
+              echo ${BACKEND_IP}
               # your code here
       - run:
           name: Backend smoke test.
