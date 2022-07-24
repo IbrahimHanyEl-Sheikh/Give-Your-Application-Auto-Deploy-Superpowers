@@ -17,21 +17,26 @@ commands:
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
+      workflow_id:
+        type: string 
       # Add parameter here     
     steps:
       - run:
           name: Revert migrations
-          # Add when this will run
+          when: on_fail # Add when this will run
           command: |
-            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = 1
-            if(( $SUCCESS==1 )); 
+            # Your Memstash or kvdb.io GET URL code goes here
+            # Example: Memstash.io
+            SUCCESS=$(curl -H "token: e52b52de-ee26-41a5-86e8-e8dcc3d995a5" --request GET https://api.memstash.io/values/migration_<< parameters.workflow_id >>)
+            # Example: kvdb.io
+            SUCCESS=$(curl --insecure  https://kvdb.io/9GE4jRtKznmVKRfvdBABBe/migration_<< parameters.workflow_id >>)
+            # Logic for reverting the database state
+            if (( $SUCCESS == 1 ));
             then
-            #  cd ~/project/backend
-            #  npm install
-            #  Add revert code here. You can find this in the Getting Started section.
-              exit 1
-            fi
+                cd ~/project/backend
+                npm install
+                npm run migration:revert
+            fi  
             
 jobs:
   build-frontend:
@@ -339,6 +344,9 @@ jobs:
           name: Backend smoke test.
           command: |
               # Fetch and prepare the BACKEND_IP env var
+              export BACKEND_IP=$(aws ec2 describe-instances \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --output text)
               export API_URL="http://${BACKEND_IP}:3030"
               echo "${API_URL}"
               if curl "${API_URL}/api/status" | grep "ok"
@@ -363,12 +371,15 @@ jobs:
             # your code here
 #      - destroy-environment:
 #          workflowid: ${CIRCLE_WORKFLOW_ID:0:7}
+#      - revert-migrations:
+#          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 #   cloudfront-update:
 #     docker:
 #       # Docker image here that supports AWS CLI
 #       - image: amazon/aws-cli
 #     steps:
 #       # Checkout code from git
+#       - checkout
 #       - run:
 #           name: Install dependencies
 #           command: |
@@ -385,6 +396,7 @@ jobs:
 #       - image: circleci/node:13.8.0
 #     steps:
 #       # Checkout code from git
+#       - checkout
 #       - run:
 #           name: Get old stack workflow id
 #           command: |
