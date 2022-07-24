@@ -17,17 +17,17 @@
     validate_certs: true
 
 - name: install depndencies
-  command: cd ~/udapeople && npm install
+  command: npm install
   args:
-    chdir: ./udapeople 
+    chdir: ~/udapeople 
       
 
 - name: stop running pm2 services 
   command: pm2 stop default
   args:
-    chdir: ./udapeople 
+    chdir: ~/udapeople 
   
 - name: start our application 
   command: pm2 start npm -- start
   args:
-    chdir: ./udapeople 
+    chdir: ~/udapeople 
