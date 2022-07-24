@@ -1,9 +1,13 @@
 ---
-- name: "copy index test page from files/index.js to ~/web/index.js"
+- name: "copy artifact tar file to ec2 instance"
   copy:
     src: artifact.tar.gz
     dest: ~/
     backup: yes
+- name: create a ~/udapeople directory
+  file:
+    path: ./udapeople
+    state: directory
 
 - name: extract archive
   ansible.builtin.unarchive:
