@@ -17,17 +17,13 @@
     validate_certs: true
 
 - name: install depndencies
-  ansible.builtin.command: npm install
-    args:
-      chdir: ~/udapeople
+  command: cd ~/udapeople && npm install
     
 
 - name: stop running pm2 services 
-  ansible.builtin.command: pm2 stop default
-    args:
-      chdir: ~/udapeople
-    
+  command: pm2 stop default
+     
+  become: yes
 - name: start our application 
-  ansible.builtin.command: pm2 start npm -- start
-    args:
-      chdir: ~/udapeople
+  command: pm2 start npm -- start
+  
