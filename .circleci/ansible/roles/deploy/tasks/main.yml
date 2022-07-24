@@ -1,9 +1,32 @@
 ---
-- name: install dependencies
-  command: npm install
+- name: "copy index test page from files/index.js to ~/web/index.js"
+  copy:
+    src: artifact.tar.gz
+    dest: ~/
+    backup: yes
+
+- name: extract archive
+      ansible.builtin.unarchive:
+        src: "~/artifact.tar.gz"
+        dest: "~/udapeople"
+        remote_src: true
+        validate_certs: true
+
+- name: install depndencies
+  ansible.builtin.command:
+    cmd: npm install
+    args:
+      chdir: ~/udapeople
+    
 
 - name: stop running pm2 services 
-  command: pm2 stop default
-
-- name: start the pm2 with our code
-  command: pm2 start npm -- start
+  ansible.builtin.command:
+    cmd: pm2 stop default
+    args:
+      chdir: ~/udapeople
+    
+- name: start our application 
+  ansible.builtin.command:
+    cmd: pm2 start npm -- start
+    args:
+      chdir: ~/udapeople
