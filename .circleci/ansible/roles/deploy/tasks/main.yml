@@ -6,11 +6,11 @@
     backup: yes
 
 - name: extract archive
-      ansible.builtin.unarchive:
-        src: "~/artifact.tar.gz"
-        dest: "~/udapeople"
-        remote_src: true
-        validate_certs: true
+  ansible.builtin.unarchive:
+    src: "~/artifact.tar.gz"
+    dest: "~/udapeople"
+    remote_src: true
+    validate_certs: true
 
 - name: install depndencies
   ansible.builtin.command:

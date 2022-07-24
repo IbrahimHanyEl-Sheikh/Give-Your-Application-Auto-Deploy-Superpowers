@@ -4,16 +4,16 @@ commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
-      stackName: 
+      workflowid: 
         type: string   
     steps:
       - run:
           name: Destroy environments
           when: on_fail
           command: |
-            aws cloudformation delete-stack --stack-name << parameters.stackName >>
-            
-
+            # aws cloudformation delete-stack --stack-name << parameters.stackName >>
+            aws cloudformation delete-stack --stack-name udapeople-backend-<< workflowid >>
+            aws cloudformation delete-stack --stack-name udapeople-frontend-<< workflowid >>
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
@@ -168,11 +168,7 @@ jobs:
             - project/.circleci/ansible/inventory.txt
 
       - destroy-environment:
-          stackName: udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
-
-      - destroy-environment:
-          stackName: udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
-      
+          workflowid: ${CIRCLE_WORKFLOW_ID:0:7}
 
   configure-infrastructure:
     docker:
@@ -204,10 +200,7 @@ jobs:
             ansible-playbook -i inventory.txt configure-server.yml
 
       - destroy-environment:
-          stackName: udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
-
-      - destroy-environment:
-          stackName: udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
+          workflowid: ${CIRCLE_WORKFLOW_ID:0:7}
 
   run-migrations:
     docker:
@@ -237,10 +230,7 @@ jobs:
             fi
 
       - destroy-environment:
-          stackName: udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
-
-      - destroy-environment:
-          stackName: udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
+          workflowid: ${CIRCLE_WORKFLOW_ID:0:7}
 
   deploy-frontend:
     docker:
@@ -270,7 +260,7 @@ jobs:
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
 
       - destroy-environment:
-          stackName: udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}
+          workflowid: ${CIRCLE_WORKFLOW_ID:0:7}
   deploy-backend:
     docker:
       # Docker image here that supports Ansible
@@ -311,7 +301,7 @@ jobs:
             ansible-playbook -i inventory.txt deploy-backend.yml
 
       - destroy-environment:
-          stackName: udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}
+          workflowid: ${CIRCLE_WORKFLOW_ID:0:7}
       # Here's where you will add some code to rollback on failure  
 
 #   smoke-test:
