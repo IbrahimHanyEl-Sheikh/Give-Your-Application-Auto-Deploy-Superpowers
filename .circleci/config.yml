@@ -11,9 +11,8 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
-            # aws cloudformation delete-stack --stack-name << parameters.stackName >>
-            aws cloudformation delete-stack --stack-name udapeople-backend-<< workflowid >>
-            aws cloudformation delete-stack --stack-name udapeople-frontend-<< workflowid >>
+            aws cloudformation delete-stack --stack-name udapeople-backend-<< parameters.workflowid >>
+            aws cloudformation delete-stack --stack-name udapeople-frontend-<< parameters.workflowid >>
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
@@ -261,6 +260,7 @@ jobs:
 
       - destroy-environment:
           workflowid: ${CIRCLE_WORKFLOW_ID:0:7}
+
   deploy-backend:
     docker:
       # Docker image here that supports Ansible
