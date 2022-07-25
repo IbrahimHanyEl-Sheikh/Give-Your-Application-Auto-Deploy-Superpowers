@@ -28,8 +28,6 @@ commands:
             # Your Memstash or kvdb.io GET URL code goes here
             # Example: Memstash.io
             SUCCESS=$(curl -H "token: 7933fe63-4687-4fa1-8426-aa25aa1730ec" --request GET https://api.memstash.io/values/migration_<< parameters.workflow_id >>)
-            # Example: kvdb.io
-            SUCCESS=$(curl --insecure  https://kvdb.io/9GE4jRtKznmVKRfvdBABBe/migration_<< parameters.workflow_id >>)
             # Logic for reverting the database state
             if (( $SUCCESS == 1 ));
             then
@@ -244,8 +242,6 @@ jobs:
             then
                 # If you are using memstash.io, generate the token "7933fe63-4687-4fa1-8426-aa25aa1730ec" on the website
                 curl -H "Content-Type: text/plain" -H "token: 7933fe63-4687-4fa1-8426-aa25aa1730ec" --request PUT --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID:0:7}
-                # If you are using kvdb.io, generate the bucket ID "9GE4jRtKznmVKRfvdBABBe" in your local terminal first
-                curl https://kvdb.io/9GE4jRtKznmVKRfvdBABBe/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
             fi
 
       - destroy-environment:
