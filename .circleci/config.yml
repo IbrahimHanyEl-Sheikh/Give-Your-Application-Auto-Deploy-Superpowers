@@ -237,7 +237,7 @@ jobs:
           command: |
             sudo apt-get update && \
             sudo apt-get install -y python3-pip python-dev && \
-            pip install --upgrade awscli
+            pip3 install --upgrade awscli
       - run:
           name: Run migrations
           command: |
@@ -275,7 +275,7 @@ jobs:
           command: |
             sudo apt-get update && \
             sudo apt-get install -y python3-pip python-dev && \
-            pip install --upgrade awscli      
+            pip3 install --upgrade awscli      
       - run:
           name: Get backend url
           command: |
@@ -458,7 +458,7 @@ jobs:
           command: |
             sudo apt-get update && \
             sudo apt-get install -y python3-pip python-dev && \
-            pip install --upgrade awscli   
+            pip3 install --upgrade awscli   
       - run:
           name: Get old stack workflow id
           command: |
