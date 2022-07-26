@@ -69,3 +69,4 @@ node_modules
 
 dist
 environmentVariables.txt
+parameter.json
