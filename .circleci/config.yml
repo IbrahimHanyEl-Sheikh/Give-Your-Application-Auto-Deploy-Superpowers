@@ -57,7 +57,7 @@ jobs:
 
   build-backend:
     docker:
-      - image: cimg/node:18.4.0
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:
@@ -89,7 +89,7 @@ jobs:
                 
   test-backend:
     docker:
-      - image: cimg/node:18.4.0
+      - image: circleci/node:13.8.0
     steps:
       - checkout        
       - restore_cache:  
@@ -117,7 +117,7 @@ jobs:
      
   scan-backend:
     docker:
-      - image: cimg/node:18.4.0
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - restore_cache:  
@@ -230,8 +230,8 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      - restore_cache:  
-          keys: [backend-build]
+      # - restore_cache:  
+      #     keys: [backend-build]
       - run:
           name: install dependencies
           command: |
