@@ -273,9 +273,9 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            apt-get update && \
-            apt-get install -y python-pip python-dev && \
-            pip install --upgrade awscli         
+            sudo apt-get update && \
+            sudo apt-get install -y python3-pip python-dev && \
+            pip install --upgrade awscli      
       - run:
           name: Get backend url
           command: |
@@ -449,15 +449,15 @@ jobs:
   cleanup:
     docker:
       # Docker image here
-      - image: cimg/node:18.4.0
+      - image: circleci/node:13.8.0
     steps:
       # Checkout code from git
       - checkout
       - run:
           name: install dependencies
           command: |
-            apt-get update && \
-            apt-get install -y python-pip python-dev && \
+            sudo apt-get update && \
+            sudo apt-get install -y python3-pip python-dev && \
             pip install --upgrade awscli   
       - run:
           name: Get old stack workflow id
