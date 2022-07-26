@@ -472,8 +472,8 @@ jobs:
               export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName" \
                       --stack-status-filter CREATE_COMPLETE --no-paginate --output text)) 
               echo Stack names: "${STACKS[@]}" 
-              curl https://kvdb.io/6oakWmzuqx4TvaofsPHvjq/oldworkflowid  -d 'OldWorkflowID'
-              curl https://kvdb.io/6oakWmzuqx4TvaofsPHvjq/stacks  -d 'STACKS'
+              curl https://kvdb.io/6oakWmzuqx4TvaofsPHvjq/oldworkflowid  -d 'OldWorkflowID' --insecure
+              curl https://kvdb.io/6oakWmzuqx4TvaofsPHvjq/stacks  -d 'STACKS' --insecure
 
       - run:
           name: Remove old stacks and files
