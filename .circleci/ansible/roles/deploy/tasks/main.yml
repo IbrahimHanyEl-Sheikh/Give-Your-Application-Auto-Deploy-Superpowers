@@ -29,7 +29,16 @@
 - name: start our application 
   command: pm2 start main.js  #pm2 start npm -- start
   args:
-    chdir: ~/udapeople/dist 
+    chdir: ~/udapeople/dist
+  register: execute_node
+
+- name: print message
+  debug:
+    msg: "{{ execute_node.stdout_lines }}"
+
+- name: "pm2 start as service"
+  shell: |
+    env PATH=$PATH:/usr/local/bin pm2 startup -u ubuntu
   environment:
       ENVIRONMENT: production
       TYPEORM_CONNECTION: "{{ lookup('env', 'TYPEORM_CONNECTION') }}"
