@@ -39,7 +39,7 @@ commands:
 jobs:
   build-frontend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:18.4.0
     steps:
       - checkout
       - restore_cache:
@@ -57,7 +57,7 @@ jobs:
 
   build-backend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:18.4.0
     steps:
       - checkout
       - restore_cache:
@@ -75,7 +75,7 @@ jobs:
 
   test-frontend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:18.4.0
     steps:
       - checkout        
       - restore_cache:  
@@ -89,7 +89,7 @@ jobs:
                 
   test-backend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:18.4.0
     steps:
       - checkout        
       - restore_cache:  
@@ -103,7 +103,7 @@ jobs:
             
   scan-frontend:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:18.4.0
     steps:
       - checkout
       - restore_cache:  
@@ -230,7 +230,7 @@ jobs:
       - restore_cache:  
           keys: [backend-build]
       - run:
-          name: 
+          name: install dependencies
           command: |
             apt-get update && \
             apt-get install -y python-pip python-dev && \
@@ -264,10 +264,15 @@ jobs:
 
   deploy-frontend:
     docker:
-      - image: sleavely/node-awscli:14.x
+      - image: cimg/node:18.4.0
     steps:
       - checkout
-                  
+      - run:
+          name: install dependencies
+          command: |
+            apt-get update && \
+            apt-get install -y python-pip python-dev && \
+            pip install --upgrade awscli         
       - run:
           name: Get backend url
           command: |
@@ -441,14 +446,16 @@ jobs:
   cleanup:
     docker:
       # Docker image here
-      - image: sleavely/node-awscli:14.x
+      - image: cimg/node:18.4.0
     steps:
       # Checkout code from git
       - checkout
       - run:
-          name: Install dependencies
+          name: install dependencies
           command: |
-            # your code here
+            apt-get update && \
+            apt-get install -y python-pip python-dev && \
+            pip install --upgrade awscli   
       - run:
           name: Get old stack workflow id
           command: |
